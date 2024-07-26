@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+:root{
+  color: var(--text);
+  font-family: "Inter", serif;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.Outest-Wrapper{
+  padding: 30px 20px;
+  background-color: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+}
+.Outest-Wrapper:has(.Main-Wrapper){
+  padding: 30px 20px 120px 20px;
+}
+button:focus-visible{
+  outline: none;
+}
+select{
+  color: var(--text);
+}
