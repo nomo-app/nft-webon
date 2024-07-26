@@ -1,6 +1,7 @@
-### Requirement
-Min. Node version 18.18
+# NFT WebOn
 
-### Before deployment
-Make sure that you have adjusted the nomo_cli_config
+"WebOn-charged NFTs" are special utility-NFTs that are augmented by WebOn-functionality.  
+This WebOn allows to display and manage WebOn-charged NFTs.  
+It also includes a generic send-functionality for NFTs.
 
+The frontend is implemented with SvelteJS.
