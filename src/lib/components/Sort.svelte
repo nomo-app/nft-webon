@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ExtendedNft, NomoToken } from '$lib/types/Nft';
+	import type { ExtendedNft, BaseNFT } from '$lib/types/Nft';
 
 	export let Nfts: ExtendedNft[];
 	const sortList = ['A-Z', 'Z-A'];
@@ -13,9 +13,9 @@
 		Nfts.sort((a, b) => {
 			switch (sortBy) {
 				case 'A-Z':
-					return sortByMetric(a.nft, b.nft, 'name', true);
+					return sortByMetric(a.baseNFT, b.baseNFT, 'name', true);
 				case 'Z-A':
-					return sortByMetric(a.nft, b.nft, 'name', false);
+					return sortByMetric(a.baseNFT, b.baseNFT, 'name', false);
 				default:
 					return 0;
 			}
@@ -23,7 +23,7 @@
 		Nfts = Nfts;
 	}
 
-	function sortByMetric(a: NomoToken, b: NomoToken, metric: keyof NomoToken, isAscending: boolean) {
+	function sortByMetric(a: BaseNFT, b: BaseNFT, metric: keyof BaseNFT, isAscending: boolean) {
 		if (a[metric] > b[metric]) return isAscending ? 1 : -1;
 		else if (a[metric] < b[metric]) return isAscending ? -1 : 1;
 		else return 0;

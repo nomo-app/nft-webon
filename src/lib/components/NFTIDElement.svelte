@@ -21,8 +21,8 @@
 	}
 	$: if (NFT) {
 		isContactAvinoc =
-			NFT.nft.contractAddress === avinoc_contract ||
-			NFT.nft.contractAddress === avinoc_contract_eth;
+			NFT.baseNFT.contractAddress === avinoc_contract ||
+			NFT.baseNFT.contractAddress === avinoc_contract_eth;
 	}
 
 	async function launchWebon() {
@@ -31,12 +31,15 @@
 		let webon = installedWebons.manifests.find(
 			(w) => {
 				const installedHost = new URL(w.webon_url).host;
+				if (!NFT.manifest) {
+					return false;
+				}
 				const nftHost = new URL(NFT.manifest.webon_url).host;
 				return installedHost === nftHost;
 			}
 		);
 
-		if (webon && isContactAvinoc) {
+		if (webon && isContactAvinoc && NFT.manifest) {
 			await nomoLaunchUrlAsWebOn({
 				manifest: {
 					...NFT.manifest,
@@ -54,12 +57,12 @@
 		goto('/send');
 	}
 	async function installWebon() {
-		if (!NFT?.contract?.webons?.at(0)) {
+		if (!NFT?.omonNFT?.webons?.at(0)) {
 			alert('Could not find webon deeplink!');
 			return;
 		}
 		nomoInstallWebOn({
-			deeplink: 'https://' + NFT.contract.webons.at(0),
+			deeplink: 'https://' + NFT.omonNFT.webons.at(0),
 			skipPermissionDialog: false,
 			navigateBack: false,
 		});
@@ -71,10 +74,10 @@
 	<div class="contract">{tokenId}</div>
 	{#if NFT.manifest?.webon_url}
 		<div class="main_btn no-select top_btn" on:click={launchWebon}>Open Webon</div>
-	{:else if NFT.contract?.webons.at(0)}
+	{:else if NFT.omonNFT?.webons.at(0)}
 		<div class="main_btn no-select top_btn" on:click={installWebon}>Add Webon</div>
 	{/if}
-	{#if NFT?.contract && !NFT?.contract?.not_transferable}
+	{#if NFT?.omonNFT && !NFT?.omonNFT?.not_transferable}
 		<div class="main_btn send_btn no-select" on:click={gotoSend}>Send NFT</div>
 	{/if}
 </div>

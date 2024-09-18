@@ -15,8 +15,8 @@
 	}}
 >
 	<img
-		src={NFT?.contract?.webons?.at(0)
-			? `https://${NFT.contract.webons.at(0)}/nomo_icon.svg`
+		src={NFT?.omonNFT?.webons?.at(0)
+			? `https://${NFT.omonNFT.webons.at(0)}/nomo_icon.svg`
 			: nft_default}
 		alt="Webon"
 		on:error={(e) => {
@@ -24,9 +24,9 @@
 		}}
 	/>
 	<span class="content-wrapper">
-		<div class="name">{NFT?.nft?.name ?? ''}</div>
-		{#if (+NFT?.nft?.balance ?? 0) > 1}
-			<div>Balance:{NFT?.nft?.balance}</div>
+		<div class="name">{NFT?.baseNFT?.name ?? ''}</div>
+		{#if (+NFT?.baseNFT?.balance) > 1}
+			<div>Balance: {NFT?.baseNFT?.balance}</div>
 		{/if}
 		<!--	<span class="address">{NFT?.nft?.contractAddress ?? 'Missing address'}</span>-->
 		<span class="main_btn no-select">Details</span>

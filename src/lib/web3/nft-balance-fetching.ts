@@ -1,13 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { DbNftResponse, ExtendedNft, NomoToken } from '$lib/types/Nft';
+import type { OmonNFT, ExtendedNft, BaseNFT } from '$lib/types/Nft';
 import type { NomoManifest } from 'nomo-webon-kit';
 import { Contract, ethers } from 'ethers';
 import { avinoc_contract_eth } from '$lib/helper/constants';
 import { getWebonsWithNFTInManifest } from './nft-webon-fetching';
 
+export async function fetchPolygonNFTs(args: { address: string }): Promise<ExtendedNft[]> {
+	const api = `https://api.polygonscan.com/api
+   ?module=account
+   &action=addresstokennftbalance
+   &address=${args.address}`;
+
+	const res = await fetch(api, { method: 'GET' });
+	if (!res) throw Error;
+
+	const data = await res.json();
+	const raw_nfts = [] as BaseNFT[];
+	const Nfts: ExtendedNft[] = [];
+
+	data?.result?.forEach((baseNFT: BaseNFT) => {
+		if (baseNFT?.type === 'ERC-721') raw_nfts.push(baseNFT);
+	});
+
+	raw_nfts.forEach((baseNFT: BaseNFT) => {
+		Nfts.push({ baseNFT, manifest: null, omonNFT: null });
+	});
+	return Nfts;
+}
+
 export async function fetchZENIQSmartchainNfts(args: {
 	address: string;
-	knownNFTs: any;
+	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
 	const api = `https://zeniqscan.com/api?module=account&action=tokenlist&address=${args.address}`;
 
@@ -15,31 +38,31 @@ export async function fetchZENIQSmartchainNfts(args: {
 	if (!res) throw Error;
 
 	const data = await res.json();
-	const raw_nfts = [] as NomoToken[];
-	const Nfts: ExtendedNft[] = [];
+	const baseNFTs = [] as BaseNFT[];
+	const extendedNFTs: ExtendedNft[] = [];
 
-	data?.result?.forEach((token: NomoToken) => {
-		if (token?.type === 'ERC-721') raw_nfts.push(token);
+	data?.result?.forEach((baseNFT: BaseNFT) => {
+		if (baseNFT?.type === 'ERC-721') baseNFTs.push(baseNFT);
 	});
 
 	const localManifests = await getWebonsWithNFTInManifest();
 
-	raw_nfts.forEach((r_nft: NomoToken) => {
-		const contract: DbNftResponse = args.knownNFTs.find(
-			(c: any) => c.contractAddress.toLowerCase() === r_nft.contractAddress?.toLowerCase()
+	baseNFTs.forEach((baseNFT: BaseNFT) => {
+		const omonNFT: OmonNFT = args.omonNFTs.find(
+			(c: any) => c.contractAddress.toLowerCase() === baseNFT.contractAddress?.toLowerCase()
 		);
 		let found_webon = false;
 		localManifests.forEach((manifest) => {
 			manifest.dependencies?.forEach(async (dep) => {
-				if (r_nft.contractAddress?.toLowerCase() === dep.toLowerCase()) {
-					Nfts.push({ nft: r_nft, manifest: manifest, contract: contract });
+				if (baseNFT.contractAddress?.toLowerCase() === dep.toLowerCase()) {
+					extendedNFTs.push({ baseNFT, manifest, omonNFT });
 					found_webon = true;
 				}
 			});
 		});
-		if (!found_webon) Nfts.push({ nft: r_nft, manifest: null, contract: contract });
+		if (!found_webon) extendedNFTs.push({ baseNFT, manifest: null, omonNFT });
 	});
-	return Nfts;
+	return extendedNFTs;
 }
 
 function getContract(): Contract {
@@ -53,15 +76,16 @@ function getContract(): Contract {
 
 export async function getEthereumAvinocNfts(args: {
 	address: string;
-	knownNFTs: any;
+	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
 	const contract = getContract();
 	const avinocEthBalance = await contract.balanceOf(args.address);
 	if (Number(avinocEthBalance) === 0) return [];
-	const contractInCoinList: DbNftResponse = args.knownNFTs.find(
-		(c: NomoToken) => c.contractAddress.toLowerCase() === avinoc_contract_eth
+
+	const omonNFT: OmonNFT = args.omonNFTs.find(
+		(c: BaseNFT) => c.contractAddress.toLowerCase() === avinoc_contract_eth
 	);
-	const nft: NomoToken = {
+	const baseNFT: BaseNFT = {
 		balance: Number(avinocEthBalance).toString(),
 		contractAddress: avinoc_contract_eth,
 		decimals: '',
@@ -85,5 +109,5 @@ export async function getEthereumAvinocNfts(args: {
 		webon_url: 'https://defi.avinoc.com',
 		min_nomo_version: '0.5.0'
 	};
-	return [{ nft: nft, manifest: avinocDeFiManifest, contract: contractInCoinList }];
+	return [{ baseNFT, manifest: avinocDeFiManifest, omonNFT }];
 }

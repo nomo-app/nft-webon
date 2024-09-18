@@ -8,11 +8,11 @@
 	import ChainSelection from '$lib/components/ChainSelection.svelte';
 	import Sort from '$lib/components/Sort.svelte';
 	import { clickedStore, selectedChain } from '$lib/store/clickedStore';
-	import { fetchZENIQSmartchainNfts, getEthereumAvinocNfts } from '$lib/web3/nft-balance-fetching';
-	import { fetchKnownNFTsFromWebOnInfo } from '$lib/web3/nft-webon-fetching';
+	import { fetchPolygonNFTs, fetchZENIQSmartchainNfts, getEthereumAvinocNfts } from '$lib/web3/nft-balance-fetching';
+	import { fetchOmonNFTs } from '$lib/web3/nft-webon-fetching';
 	let loading = true;
 	let Nfts: ExtendedNft[] = [];
-	let knownNFTs: any;
+	let omonNFTs: any;
 	let error = '';
 	let rerender_key = {};
 
@@ -23,7 +23,7 @@
 	async function initNftGet() {
 		loading = true;
 		try {
-			knownNFTs = await fetchKnownNFTsFromWebOnInfo();
+			omonNFTs = await fetchOmonNFTs();
 		} catch (e) {
 			error = 'Failed to fetch list of known NFTs.';
 			return;
@@ -41,9 +41,11 @@
 		try {
 			Nfts = [];
 			if ($selectedChain === 'ZSC'){
-				 Nfts = await fetchZENIQSmartchainNfts({address, knownNFTs});
+				 Nfts = await fetchZENIQSmartchainNfts({address, omonNFTs});
 			} else if ($selectedChain === 'ETH') {
-				 Nfts = (await getEthereumAvinocNfts({ address, knownNFTs })) as any as ExtendedNft[];
+				 Nfts = (await getEthereumAvinocNfts({ address, omonNFTs })) as any as ExtendedNft[];
+			} else if ($selectedChain === 'POLYGON') {
+				 Nfts = (await fetchPolygonNFTs({ address })) as any as ExtendedNft[];
 			} else {
 				throw Error(`Chain ${$selectedChain} not supported`);
 			}

@@ -41,7 +41,7 @@
 		if (!provider) throw new Error('No valid provider!');
 		const signer = new EthersjsNomoSigner(provider);
 		return new ethers.Contract(
-			NFT.nft.contractAddress,
+			NFT.baseNFT.contractAddress,
 			[`function safeTransferFrom(address from, address to, uint256 tokenId) external`],
 			signer
 		);
@@ -50,7 +50,7 @@
 		const provider = getProvider();
 		if (!provider) throw new Error('No valid provider!');
 		return new ethers.Contract(
-			NFT.nft.contractAddress,
+			NFT.baseNFT.contractAddress,
 			['function ownerOf(uint256 tokenId) view returns (address)'],
 			provider
 		);

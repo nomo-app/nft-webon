@@ -2,9 +2,9 @@
 import { isFallbackModeActive, nomoGetInstalledWebOns, type NomoManifest } from 'nomo-webon-kit';
 
 /**
- * Returns known NFTs from a webon.info-API
+ * Returns known NFTs from a webon.info-API (from the Omon-database)
  */
-export async function fetchKnownNFTsFromWebOnInfo() {
+export async function fetchOmonNFTs() {
 	const res = await fetch('https://webon.info/api/tokens');
 	const json = await res.json();
 	return json.filter((j: any) => j.is_nft);

@@ -1,12 +1,9 @@
 import type { NomoManifest } from 'nomo-webon-kit';
 
-export type Nft = {
-	id: string;
-	contract_address: string;
-	explorer_link: string;
-	webon_domain: string;
-};
-export type NomoToken = {
+/**
+ * BaseNFT can be any NFT from any network.
+ */
+export type BaseNFT = {
 	balance: string;
 	contractAddress: string;
 	decimals: string;
@@ -14,14 +11,20 @@ export type NomoToken = {
 	symbol: string;
 	type: string;
 };
+
+/**
+ * ExtendedNft provides a merge between NFTs and WebOns.
+ */
 export type ExtendedNft = {
-	nft: NomoToken;
+	baseNFT: BaseNFT;
 	manifest: NomoManifest | null;
-	contract: DbNftResponse;
-	contractAddress?: string;
+	omonNFT: OmonNFT | null;
 };
 
-export type DbNftResponse = {
+/**
+ * OmonNFT is a known entry from the Nomo-specific database of NFTs.
+ */
+export type OmonNFT = {
 	name: string;
 	symbol: string;
 	decimals: null;

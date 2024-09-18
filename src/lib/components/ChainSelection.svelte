@@ -13,8 +13,8 @@
 		{
 			name: 'Ethereum',
 			value: 'ETH'
-		}
-		// {
+		},
+		//{
 		// 	name: 'Polygon',
 		// 	value: 'POLYGON'
 		// }
@@ -43,8 +43,6 @@
 				{chain.name}
 			</option>
 		{/each}
-		<!--TODO KANN DAS WEG?-->
-		<option disabled>More chains available soon</option>
 	</select>
 	<img src={arrowDown} alt="open select" />
 </div>
