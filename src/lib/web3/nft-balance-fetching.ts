@@ -15,17 +15,17 @@ export async function fetchPolygonNFTs(args: { address: string }): Promise<Exten
 	if (!res) throw Error;
 
 	const data = await res.json();
-	const raw_nfts = [] as BaseNFT[];
-	const Nfts: ExtendedNft[] = [];
+	const baseNFTs = [] as BaseNFT[];
+	const extendedNFTs: ExtendedNft[] = [];
 
 	data?.result?.forEach((baseNFT: BaseNFT) => {
-		if (baseNFT?.type === 'ERC-721') raw_nfts.push(baseNFT);
+		if (baseNFT?.type === 'ERC-721') baseNFTs.push(baseNFT);
 	});
 
-	raw_nfts.forEach((baseNFT: BaseNFT) => {
-		Nfts.push({ baseNFT, manifest: null, omonNFT: null });
+	baseNFTs.forEach((baseNFT: BaseNFT) => {
+		extendedNFTs.push({ baseNFT, manifest: null, omonNFT: null });
 	});
-	return Nfts;
+	return extendedNFTs;
 }
 
 export async function fetchZENIQSmartchainNfts(args: {
