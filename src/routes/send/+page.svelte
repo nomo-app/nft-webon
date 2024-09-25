@@ -6,7 +6,7 @@
 	import type { ExtendedNft } from '$lib/types/Nft';
 	import Loading from '$lib/components/Loading.svelte';
 	import { Contract, ethers } from 'ethers';
-	import { nomoGetEvmAddress } from 'nomo-webon-kit';
+	import { nomoGetEvmAddress, nomo } from 'nomo-webon-kit';
 	import { EthersjsNomoSigner, zscProvider } from 'ethersjs-nomo-webons';
 
 	let receiverAddress = '';
@@ -99,6 +99,11 @@
 			clickedStore.set(null);
 		}, 500);
 	}
+
+	async function onClickScan() {
+		const qrCode = (await nomo.qrScan()).qrCode.trim();
+		receiverAddress = qrCode;
+	}
 </script>
 
 {#if loading}
@@ -114,7 +119,10 @@
 		{/if}
 		<div class="container">
 			<div class="label">Receiver Address</div>
-			<input type="text" bind:value={receiverAddress} />
+			<div style="display: flex;align-items: center;background-color: #eeeeee;">
+				<input type="text" bind:value={receiverAddress} >
+				<img src="ic_scan.svg" alt="scan icon" style="margin:8px;" on:click={() => onClickScan()}/>
+			</div>
 			<div class="label">Token ID</div>
 			<input type="number" bind:value={tokenId} disabled />
 		</div>
