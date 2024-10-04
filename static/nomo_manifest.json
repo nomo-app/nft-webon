@@ -2,7 +2,7 @@
   "nomo_manifest_version": "1.2.0",
   "webon_id": "zone.nomo.nft",
   "webon_name": "NFTs",
-  "webon_version": "0.1.12",
+  "webon_version": "0.1.13",
   "min_nomo_version": "0.5.0",
   "dependencies": [],
   "permissions": [

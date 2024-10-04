@@ -42,7 +42,13 @@ export async function fetchZENIQSmartchainNfts(args: {
 	const extendedNFTs: ExtendedNft[] = [];
 
 	data?.result?.forEach((baseNFT: BaseNFT) => {
-		if (baseNFT?.type === 'ERC-721') baseNFTs.push(baseNFT);
+		if (baseNFT?.type === 'ERC-721') {
+			baseNFTs.push(baseNFT);
+		} else if (baseNFT?.type === 'ERC-1155') {
+			if (baseNFT.decimals === '0' || !baseNFT.decimals) {
+				baseNFTs.push(baseNFT);
+			}
+		}
 	});
 
 	const localManifests = await getWebonsWithNFTInManifest();
