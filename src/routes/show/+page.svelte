@@ -19,6 +19,7 @@
 	import NFTIDElement from '$lib/components/NFTIDElement.svelte';
 	import { zscProvider } from 'ethersjs-nomo-webons';
 	import { ethers } from 'ethers';
+	import { getNftName } from '$lib/helper/name-replace';
 
 	let NFT: ExtendedNft;
 	let loading = true;
@@ -150,7 +151,7 @@
 				if (e?.target?.src) e.target.src = nft_default;
 			}}
 		/>
-		<div class="name">{NFT?.baseNFT?.name ?? ''}</div>
+		<div class="name">{getNftName(NFT)}</div>
 		<div class="label">Contract Address</div>
 		<div class="contract">{NFT?.baseNFT?.contractAddress ?? 'Missing address'}</div>
 		{#if (+NFT?.baseNFT?.balance ?? 0) > 1}

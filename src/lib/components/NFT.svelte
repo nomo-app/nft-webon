@@ -3,6 +3,7 @@
 	import { nft_default } from '$lib/assets';
 	import { goto } from '$app/navigation';
 	import { clickedStore } from '$lib/store/clickedStore';
+	import { getNftName } from '$lib/helper/name-replace';
 
 	export let NFT: ExtendedNft;
 </script>
@@ -24,7 +25,7 @@
 		}}
 	/>
 	<span class="content-wrapper">
-		<div class="name">{NFT?.baseNFT?.name ?? ''}</div>
+		<div class="name">{getNftName(NFT)}</div>
 		{#if (+NFT?.baseNFT?.balance) > 1}
 			<div>Balance: {NFT?.baseNFT?.balance}</div>
 		{/if}
