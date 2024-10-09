@@ -8,6 +8,7 @@
 	import { Contract, ethers } from 'ethers';
 	import { nomoGetEvmAddress, nomo } from 'nomo-webon-kit';
 	import { EthersjsNomoSigner, zscProvider } from 'ethersjs-nomo-webons';
+	import { invokeNomoFunction } from 'nomo-webon-kit/dist/dart_interface';
 
 	let receiverAddress = '';
 	let tokenId: number;
@@ -56,6 +57,10 @@
 		);
 	}
 
+	async function nomoResolveName(args: {name: string}): Promise<{address: string; nameService: string}> {
+		return await invokeNomoFunction('nomoResolveName', args);
+	}
+
 	async function sendNft() {
 		loadingBtn = true;
 		if (!receiverAddress) {
@@ -67,6 +72,17 @@
 			inputError = 'Please enter a token ID!';
 			loadingBtn = false;
 			return;
+		}
+		receiverAddress = receiverAddress.trim();
+		if (receiverAddress.endsWith('.eth') || receiverAddress.endsWith('.znq')) {
+			const name = receiverAddress;
+			receiverAddress = (await nomoResolveName({name})).address;
+			if (!receiverAddress) {
+				receiverAddress = name;
+				inputError = 'Name could not be found!';
+				loadingBtn = false;
+				return;
+			}
 		}
 		if (!ethers.isAddress(receiverAddress)) {
 			inputError = 'Please enter a valid Address!';
