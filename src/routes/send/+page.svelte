@@ -93,7 +93,7 @@
 		const nvm = await nomoGetEvmAddress();
 		const isOwner = (await ownerContract.ownerOf(tokenId))?.toLowerCase();
 
-		if (isOwner !== nvm) {
+		if (isOwner && isOwner.toLowerCase() !== nvm.toLowerCase()) {
 			inputError = 'You do not own an NFT with that token ID!';
 			loadingBtn = false;
 			return;
@@ -102,8 +102,9 @@
 		try {
 			const transferContract = await getTransferContract();
 			const address = nomoGetEvmAddress();
-			await transferContract.safeTransferFrom(address, receiverAddress, tokenId);
+			await transferContract.safeTransferFrom(address, receiverAddress, tokenId, { gasLimit: 250000 });
 		} catch (e) {
+			console.error(e);
 			inputError = 'Failed to send NFT!';
 			loadingBtn = false;
 			return;
