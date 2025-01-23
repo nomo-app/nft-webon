@@ -162,7 +162,7 @@
 			<div class="contract">{tokenIds[0].tokenID}</div>
 		{/if}
 		{#if NFT.omonNFT?.webons.at(0)}
-			<div class="label">Webon</div>
+			<div class="label">WebOn</div>
 			<div class="contract">{NFT.omonNFT?.webons.at(0)}</div>
 		{/if}
 		{#if !tokenIds || tokenIds.length === 1}

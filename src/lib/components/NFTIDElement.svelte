@@ -77,9 +77,7 @@
 	{:else if NFT.omonNFT?.webons.at(0)}
 		<div class="main_btn no-select top_btn" on:click={installWebon}>Add Webon</div>
 	{/if}
-	{#if NFT?.omonNFT && !NFT?.omonNFT?.not_transferable}
-		<div class="main_btn send_btn no-select" on:click={gotoSend}>Send NFT</div>
-	{/if}
+	<div class="main_btn send_btn no-select" on:click={gotoSend}>Send NFT</div>
 </div>
 
 <style lang="scss">
