@@ -84,6 +84,10 @@
 				return;
 			}
 		}
+		if (receiverAddress.includes("?")) {
+			// enable scanning of non-raw receive-addresses from Nomo
+			receiverAddress = receiverAddress.split("?")[0];
+		}
 		if (!ethers.isAddress(receiverAddress)) {
 			inputError = 'Please enter a valid Address!';
 			loadingBtn = false;
