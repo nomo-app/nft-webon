@@ -68,7 +68,7 @@
 			loadingBtn = false;
 			return;
 		}
-		if (typeof tokenId !== 'number') {
+		if (typeof tokenId !== 'bigint' && typeof tokenId !== 'number') {
 			inputError = 'Please enter a token ID!';
 			loadingBtn = false;
 			return;
