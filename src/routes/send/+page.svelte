@@ -107,15 +107,15 @@
 			const transferContract = await getTransferContract();
 			const address = nomoGetEvmAddress();
 			await transferContract.safeTransferFrom(address, receiverAddress, tokenId, { gasLimit: 250000 });
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e);
-			inputError = 'Failed to send NFT!';
+			inputError = 'Failed to send NFT! ' + (e?.message ?? '');
 			loadingBtn = false;
 			return;
 		}
 		setTimeout(() => {
 			successMsg = 'Successfully sent NFT!';
-			tokenId = undefined;
+			// tokenId = undefined;
 			loadingBtn = false;
 			clickedStore.set(null);
 		}, 500);
