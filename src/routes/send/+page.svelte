@@ -68,7 +68,7 @@
 			loadingBtn = false;
 			return;
 		}
-		if (!tokenId) {
+		if (typeof tokenId !== 'number') {
 			inputError = 'Please enter a token ID!';
 			loadingBtn = false;
 			return;
