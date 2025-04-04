@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { OmonNFT, ExtendedNft, BaseNFT } from '$lib/types/Nft';
 import type { NomoManifest } from 'nomo-webon-kit';
+import { nomo } from 'nomo-webon-kit';
 import { Contract, ethers } from 'ethers';
 import { avinoc_contract_eth } from '$lib/helper/constants';
 import { getWebonsWithNFTInManifest } from './nft-webon-fetching';
@@ -32,12 +33,13 @@ export async function fetchZENIQSmartchainNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
-	const api = `https://zeniqscan.com/api?module=account&action=tokenlist&address=${args.address}`;
+	const api = `https://beta.zeniqscan.com/api?module=account&action=tokenlist&address=${args.address}`;
 
-	const res = await fetch(api, { method: 'GET', mode: 'cors' });
+	// using nomo.authHttp to bypass CORS
+	const res = await nomo.authHttp({ url: api, method: 'GET' });
 	if (!res) throw Error;
 
-	const data = await res.json();
+	const data = JSON.parse(res.response);
 	const baseNFTs = [] as BaseNFT[];
 	const extendedNFTs: ExtendedNft[] = [];
 
