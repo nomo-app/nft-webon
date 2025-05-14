@@ -33,7 +33,7 @@ export async function fetchZENIQSmartchainNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
-	const api = `https://beta.zeniqscan.com/api?module=account&action=tokenlist&address=${args.address}`;
+	const api = `https://zeniqscan.com/api?module=account&action=tokenlist&address=${args.address}`;
 
 	// using nomo.authHttp to bypass CORS
 	const res = await nomo.authHttp({ url: api, method: 'GET' });
