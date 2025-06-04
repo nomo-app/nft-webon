@@ -10,6 +10,9 @@
 	import { clickedStore, selectedChain } from '$lib/store/clickedStore';
 	import { fetchPolygonNFTs, fetchZENIQSmartchainNfts, getEthereumAvinocNfts } from '$lib/web3/nft-balance-fetching';
 	import { fetchOmonNFTs } from '$lib/web3/nft-webon-fetching';
+	import '$lib/backup-modal.js';
+
+
 	let loading = true;
 	let Nfts: ExtendedNft[] = [];
 	let omonNFTs: any;
