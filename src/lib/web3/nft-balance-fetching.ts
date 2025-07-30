@@ -6,27 +6,32 @@ import { Contract, ethers } from 'ethers';
 import { avinoc_contract_eth } from '$lib/helper/constants';
 import { getWebonsWithNFTInManifest } from './nft-webon-fetching';
 
-export async function fetchPolygonNFTs(args: { address: string }): Promise<ExtendedNft[]> {
-	const api = `https://api.polygonscan.com/api
-   ?module=account
-   &action=addresstokennftbalance
-   &address=${args.address}`;
+const otiumStakingContract = '0x2026e56be6f8CA6dC7AeED3b2cb715ce04F33c2a';
 
-	const res = await fetch(api, { method: 'GET' });
-	if (!res) throw Error;
-
-	const data = await res.json();
-	const baseNFTs = [] as BaseNFT[];
-	const extendedNFTs: ExtendedNft[] = [];
-
-	data?.result?.forEach((baseNFT: BaseNFT) => {
-		if (baseNFT?.type === 'ERC-721') baseNFTs.push(baseNFT);
+export async function fetchPolygonNFTs(args: {
+	address: string;
+	omonNFTs: any;
+}): Promise<ExtendedNft[]> {
+	const polygonProvider = new ethers.JsonRpcProvider('https://polygon-rpc.com', {
+		name: 'polygon',
+		chainId: 137
 	});
+	const contract = getNftBalanceFetchContract(polygonProvider, otiumStakingContract);
+	const avinocEthBalance = await contract.balanceOf(args.address);
+	if (Number(avinocEthBalance) === 0) return [];
 
-	baseNFTs.forEach((baseNFT: BaseNFT) => {
-		extendedNFTs.push({ baseNFT, manifest: null, omonNFT: null });
-	});
-	return extendedNFTs;
+	const omonNFT: OmonNFT = args.omonNFTs.find(
+		(c: BaseNFT) => c.contractAddress.toLowerCase() === otiumStakingContract.toLowerCase()
+	);
+	const baseNFT: BaseNFT = {
+		balance: Number(avinocEthBalance).toString(),
+		contractAddress: otiumStakingContract,
+		decimals: '',
+		name: 'Otium Staking NFT',
+		symbol: '',
+		type: 'ERC-721'
+	};
+	return [{ baseNFT, manifest: null, omonNFT }];
 }
 
 export async function fetchZENIQSmartchainNfts(args: {
@@ -73,10 +78,12 @@ export async function fetchZENIQSmartchainNfts(args: {
 	return extendedNFTs;
 }
 
-function getContract(): Contract {
-	const provider = ethers.getDefaultProvider();
+function getNftBalanceFetchContract(
+	provider: ethers.AbstractProvider,
+	contractAddress: string
+): Contract {
 	return new ethers.Contract(
-		avinoc_contract_eth,
+		contractAddress,
 		[`function balanceOf(address owner) view returns (uint256)`],
 		provider
 	);
@@ -86,7 +93,8 @@ export async function getEthereumAvinocNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
-	const contract = getContract();
+	const provider = ethers.getDefaultProvider();
+	const contract = getNftBalanceFetchContract(provider, avinoc_contract_eth);
 	const avinocEthBalance = await contract.balanceOf(args.address);
 	if (Number(avinocEthBalance) === 0) return [];
 

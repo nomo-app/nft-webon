@@ -14,10 +14,10 @@
 			name: 'Ethereum',
 			value: 'ETH'
 		},
-		//{
-		// 	name: 'Polygon',
-		// 	value: 'POLYGON'
-		// }
+		{
+			name: 'Polygon',
+			value: 'POLYGON'
+		}
 	];
 
 	$: if ($selectedChain) {

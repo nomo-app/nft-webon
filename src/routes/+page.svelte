@@ -48,7 +48,7 @@
 			} else if ($selectedChain === 'ETH') {
 				 Nfts = (await getEthereumAvinocNfts({ address, omonNFTs })) as any as ExtendedNft[];
 			} else if ($selectedChain === 'POLYGON') {
-				 Nfts = (await fetchPolygonNFTs({ address })) as any as ExtendedNft[];
+				 Nfts = (await fetchPolygonNFTs({ address, omonNFTs })) as any as ExtendedNft[];
 			} else {
 				throw Error(`Chain ${$selectedChain} not supported`);
 			}
