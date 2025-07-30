@@ -17,14 +17,14 @@ export async function fetchPolygonNFTs(args: {
 		chainId: 137
 	});
 	const contract = getNftBalanceFetchContract(polygonProvider, otiumStakingContract);
-	const avinocEthBalance = await contract.balanceOf(args.address);
-	if (Number(avinocEthBalance) === 0) return [];
+	const nftBalance = await contract.balanceOf(args.address);
+	if (Number(nftBalance) === 0) return [];
 
 	const omonNFT: OmonNFT = args.omonNFTs.find(
 		(c: BaseNFT) => c.contractAddress.toLowerCase() === otiumStakingContract.toLowerCase()
 	);
 	const baseNFT: BaseNFT = {
-		balance: Number(avinocEthBalance).toString(),
+		balance: Number(nftBalance).toString(),
 		contractAddress: otiumStakingContract,
 		decimals: '',
 		name: 'Otium Staking NFT',
@@ -95,14 +95,14 @@ export async function getEthereumAvinocNfts(args: {
 }): Promise<ExtendedNft[]> {
 	const provider = ethers.getDefaultProvider();
 	const contract = getNftBalanceFetchContract(provider, avinoc_contract_eth);
-	const avinocEthBalance = await contract.balanceOf(args.address);
-	if (Number(avinocEthBalance) === 0) return [];
+	const nftBalance = await contract.balanceOf(args.address);
+	if (Number(nftBalance) === 0) return [];
 
 	const omonNFT: OmonNFT = args.omonNFTs.find(
 		(c: BaseNFT) => c.contractAddress.toLowerCase() === avinoc_contract_eth
 	);
 	const baseNFT: BaseNFT = {
-		balance: Number(avinocEthBalance).toString(),
+		balance: Number(nftBalance).toString(),
 		contractAddress: avinoc_contract_eth,
 		decimals: '',
 		name: 'Staking NFT',
