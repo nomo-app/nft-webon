@@ -16,13 +16,11 @@
 	import NFTIDElement from '$lib/components/NFTIDElement.svelte';
 
 	import { getNftName } from '$lib/helper/name-replace';
-	import { getEthersProvider, getEvmAddress } from '$lib/web3/ethers-providers';
-	import { nomoFetchERC721, type ERC721Entity } from 'ethersjs-nomo-webons';
 	import { fetchNFTIDs } from '$lib/web3/nft-id-fetching';
 
 	let NFT: ExtendedNft;
 	let loading = true;
-	let tokenIds: ERC721Entity[] | undefined;
+	let tokenIds: bigint[] | undefined;
 	let isContactAvinoc = false;
 	let chain: NomoEvmNetwork;
 	let webonImg = nft_default;
@@ -117,7 +115,7 @@
 	}
 	function gotoSend() {
 		if (!tokenIds?.length) return;
-		selectedNFTIdStore.set(tokenIds[0].tokenID);
+		selectedNFTIdStore.set(tokenIds[0]);
 		goto('/send');
 	}
 </script>
@@ -142,7 +140,7 @@
 			<div class="contract">{NFT?.baseNFT?.balance ?? '1'}</div>
 		{:else if (+NFT?.baseNFT?.balance ?? 0) === 1 && tokenIds?.length === 1}
 			<div class="label">ID</div>
-			<div class="contract">{tokenIds[0].tokenID}</div>
+			<div class="contract">{tokenIds[0]}</div>
 		{/if}
 		{#if NFT.omonNFT?.webons.at(0)}
 			<div class="label">WebOn</div>
@@ -162,7 +160,7 @@
 	{#if tokenIds && tokenIds?.length && tokenIds.length > 1}
 		<div class="NFT-id-wrapper">
 			{#each tokenIds as tokenId}
-				<NFTIDElement bind:NFT bind:tokenId={tokenId.tokenID} />
+				<NFTIDElement bind:NFT bind:tokenId={tokenId} />
 			{/each}
 		</div>
 	{:else if !tokenIds}
