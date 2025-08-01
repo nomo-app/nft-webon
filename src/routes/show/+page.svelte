@@ -18,6 +18,7 @@
 	import { getNftName } from '$lib/helper/name-replace';
 	import { getEthersProvider, getEvmAddress } from '$lib/web3/ethers-providers';
 	import { nomoFetchERC721, type ERC721Entity } from 'ethersjs-nomo-webons';
+	import { fetchNFTIDs } from '$lib/web3/nft-id-fetching';
 
 	let NFT: ExtendedNft;
 	let loading = true;
@@ -59,16 +60,7 @@
 	});
 
 	async function fetchIds() {
-		const add = await getEvmAddress();
-
-		if (true) {
-			const provider = getEthersProvider(chain);
-			tokenIds = await nomoFetchERC721({
-				provider: provider,
-				nftContractAddress: NFT.baseNFT.contractAddress,
-				evmAddress: add
-			});
-		}
+		tokenIds = await fetchNFTIDs({ chain, nftContractAddress: NFT.baseNFT.contractAddress });
 	}
 
 	async function findManifestForNFT() {
