@@ -5,6 +5,7 @@ import { nomo } from 'nomo-webon-kit';
 import { Contract, ethers } from 'ethers';
 import { avinoc_contract_eth } from '$lib/helper/constants';
 import { getWebonsWithNFTInManifest } from './nft-webon-fetching';
+import { getEthersProvider } from './ethers-providers';
 
 const otiumStakingContract = '0x2026e56be6f8CA6dC7AeED3b2cb715ce04F33c2a';
 
@@ -12,10 +13,7 @@ export async function fetchPolygonNFTs(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
-	const polygonProvider = new ethers.JsonRpcProvider('https://polygon-rpc.com', {
-		name: 'polygon',
-		chainId: 137
-	});
+	const polygonProvider = getEthersProvider('polygon');
 	const contract = getNftBalanceFetchContract(polygonProvider, otiumStakingContract);
 	const nftBalance = await contract.balanceOf(args.address);
 	if (Number(nftBalance) === 0) return [];
@@ -93,7 +91,7 @@ export async function getEthereumAvinocNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
-	const provider = ethers.getDefaultProvider();
+	const provider = getEthersProvider('ethereum');
 	const contract = getNftBalanceFetchContract(provider, avinoc_contract_eth);
 	const nftBalance = await contract.balanceOf(args.address);
 	if (Number(nftBalance) === 0) return [];

@@ -1,34 +1,35 @@
 <script lang="ts">
 	import { arrowDown, eth, polygon, zeniq } from '$lib/assets';
 	import { selectedChain } from '$lib/store/clickedStore';
+	import type { NomoEvmNetwork } from 'nomo-webon-kit';
 
 	let chain_image: string;
 	// TODO ADD ACTUAL FUNCTIONALITY
 
-	const chain_list = [
+	const chain_list: { name: string; value: NomoEvmNetwork }[] = [
 		{
 			name: 'Zeniq',
-			value: 'ZSC'
+			value: 'zeniq-smart-chain'
 		},
 		{
 			name: 'Ethereum',
-			value: 'ETH'
+			value: 'ethereum'
 		},
 		{
 			name: 'Polygon',
-			value: 'POLYGON'
+			value: 'polygon'
 		}
 	];
 
 	$: if ($selectedChain) {
 		switch ($selectedChain) {
-			case 'ZSC':
+			case 'zeniq-smart-chain':
 				chain_image = zeniq;
 				break;
-			case 'POLYGON':
+			case 'polygon':
 				chain_image = polygon;
 				break;
-			case 'ETH':
+			case 'ethereum':
 				chain_image = eth;
 				break;
 		}

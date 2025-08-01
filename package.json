@@ -38,8 +38,8 @@
 	"dependencies": {
 		"@sveltejs/adapter-static": "^3.0.1",
 		"ethers": "^6.13.0",
-		"ethersjs-nomo-webons": "^0.2.3",
-		"nomo-webon-kit": "^0.1.31",
+		"ethersjs-nomo-webons": "^0.2.5",
+		"nomo-webon-kit": "^0.1.40",
 		"sass": "^1.75.0",
 		"svelte-loading-spinners": "^0.3.6",
 		"svelte-preprocess": "^5.1.3"

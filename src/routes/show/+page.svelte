@@ -6,7 +6,6 @@
 		nomoGetEvmAddress,
 		nomoGetInstalledWebOns,
 		nomoInstallWebOn,
-		nomoLaunchWebOn,
 		nomoRegisterOnWebOnVisible
 	} from 'nomo-webon-kit';
 	import Loading from '$lib/components/Loading.svelte';
@@ -17,9 +16,9 @@
 	import { avinoc_contract, avinoc_contract_eth } from '$lib/helper/constants';
 	import { type ERC721Entity, nomoFetchERC721 } from '$lib/web3/nft-id-fetching';
 	import NFTIDElement from '$lib/components/NFTIDElement.svelte';
-	import { zscProvider } from 'ethersjs-nomo-webons';
-	import { ethers } from 'ethers';
+
 	import { getNftName } from '$lib/helper/name-replace';
+	import { getEthersProvider } from '$lib/web3/ethers-providers';
 
 	let NFT: ExtendedNft;
 	let loading = true;
@@ -34,14 +33,7 @@
 			NFT.baseNFT.contractAddress === avinoc_contract_eth;
 	}
 	$: if ($selectedChain) {
-		switch ($selectedChain) {
-			case 'ZSC':
-				chain = 'zeniq-smart-chain';
-				break;
-			case 'ETH':
-				chain = 'ethereum';
-				break;
-		}
+		chain = $selectedChain;
 	}
 	$: if (NFT) {
 		webonImg = isContactAvinoc
@@ -71,7 +63,7 @@
 		const add = await nomoGetEvmAddress();
 
 		if (true) {
-			const provider = chain === 'ethereum' ? ethers.getDefaultProvider() : zscProvider;
+			const provider = getEthersProvider(chain);
 			tokenIds = await nomoFetchERC721({
 				provider: provider,
 				nftContractAddress: NFT.baseNFT.contractAddress,
@@ -112,13 +104,13 @@
 		let webon = installedWebons.manifests.find(
 			(w) => {
 				const manifestHost = new URL(w.webon_url).host;
-				const nftHost = NFT.omonNFT.webons[0]?.trim()?.toLowerCase();
+				const nftHost = NFT.omonNFT?.webons[0]?.trim()?.toLowerCase();
 				return manifestHost === nftHost;
 			}
 		);
 
 		if (webon) {
-			await nomoLaunchWebOn({ manifest: webon, payload: '' });
+			await nomoInstallWebOn({ deeplink: webon.webon_url, skipPermissionDialog: true, navigateBack: false });
 		} else alert("Coudn't find webon please make sure it is installed.");
 	}
 	async function installWebon() {

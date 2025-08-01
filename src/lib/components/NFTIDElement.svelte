@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { avinoc_contract, avinoc_contract_eth } from '$lib/helper/constants';
-	import { nomoGetInstalledWebOns, nomoInstallWebOn, nomoLaunchUrlAsWebOn } from 'nomo-webon-kit';
+	import { nomoGetInstalledWebOns, nomoInstallWebOn, nomoLaunchUrlAsWebOn, type NomoEvmNetwork } from 'nomo-webon-kit';
 	import { goto } from '$app/navigation';
 	import type { ExtendedNft } from '$lib/types/Nft';
 	import { selectedChain, selectedNFTIdStore } from '$lib/store/clickedStore';
@@ -8,16 +8,9 @@
 	export let NFT: ExtendedNft;
 	export let tokenId: bigint;
 	let isContactAvinoc = false;
-	let chain = '';
+	let chain: NomoEvmNetwork | null = null;
 	$: if ($selectedChain) {
-		switch ($selectedChain) {
-			case 'ZSC':
-				chain = 'zeniq-smart-chain';
-				break;
-			case 'ETH':
-				chain = 'ethereum';
-				break;
-		}
+		chain = $selectedChain;
 	}
 	$: if (NFT) {
 		isContactAvinoc =
@@ -47,7 +40,7 @@
 				}
 			});
 		} else if (webon) {
-			await nomoLaunchUrlAsWebOn({ manifest: NFT.manifest });
+			await nomoLaunchUrlAsWebOn({ manifest: NFT.manifest! });
 		} else {
 			alert("Coudn't find webon please make sure it is installed.");
 		}

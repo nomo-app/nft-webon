@@ -43,11 +43,11 @@
 	async function fetchNFTs(address: string) {
 		try {
 			Nfts = [];
-			if ($selectedChain === 'ZSC'){
+			if ($selectedChain === 'zeniq-smart-chain') {
 				 Nfts = await fetchZENIQSmartchainNfts({address, omonNFTs});
-			} else if ($selectedChain === 'ETH') {
+			} else if ($selectedChain === 'ethereum') {
 				 Nfts = (await getEthereumAvinocNfts({ address, omonNFTs })) as any as ExtendedNft[];
-			} else if ($selectedChain === 'POLYGON') {
+			} else if ($selectedChain === 'polygon') {
 				 Nfts = (await fetchPolygonNFTs({ address, omonNFTs })) as any as ExtendedNft[];
 			} else {
 				throw Error(`Chain ${$selectedChain} not supported`);

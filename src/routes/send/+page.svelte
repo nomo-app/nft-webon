@@ -9,9 +9,10 @@
 	import { nomoGetEvmAddress, nomo } from 'nomo-webon-kit';
 	import { EthersjsNomoSigner, zscProvider } from 'ethersjs-nomo-webons';
 	import { invokeNomoFunction } from 'nomo-webon-kit/dist/dart_interface';
+	import { getEthersProvider } from '$lib/web3/ethers-providers';
 
 	let receiverAddress = '';
-	let tokenId: number;
+	let tokenId: bigint;
 	let inputError = '';
 	let loading = true;
 	let NFT: ExtendedNft;
@@ -28,17 +29,8 @@
 		loading = false;
 	});
 
-	function getProvider() {
-		switch ($selectedChain) {
-			case 'ZSC':
-				return zscProvider;
-			case 'ETH':
-				return ethers.getDefaultProvider();
-		}
-	}
-
 	async function getTransferContract(): Promise<Contract> {
-		const provider = getProvider();
+		const provider = getEthersProvider($selectedChain);
 		if (!provider) throw new Error('No valid provider!');
 		const signer = new EthersjsNomoSigner(provider);
 		return new ethers.Contract(
@@ -48,7 +40,7 @@
 		);
 	}
 	async function getOwnerOfContract(): Promise<Contract> {
-		const provider = getProvider();
+		const provider = getEthersProvider($selectedChain);
 		if (!provider) throw new Error('No valid provider!');
 		return new ethers.Contract(
 			NFT.baseNFT.contractAddress,
@@ -117,7 +109,7 @@
 			successMsg = 'Successfully sent NFT!';
 			// tokenId = undefined;
 			loadingBtn = false;
-			clickedStore.set(null);
+			clickedStore.set(null as any);
 		}, 500);
 	}
 
