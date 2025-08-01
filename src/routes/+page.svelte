@@ -1,7 +1,7 @@
 <script lang="ts">
 	import NFT from '$lib/components/NFT.svelte';
 	import { coin } from '$lib/assets';
-	import { nomoGetEvmAddress, type NomoManifest, nomoRegisterOnWebOnVisible, runsAsWebOn } from 'nomo-webon-kit';
+	import { nomoRegisterOnWebOnVisible } from 'nomo-webon-kit';
 	import { prettyLogError } from '$lib/helper/logger';
 	import type { ExtendedNft } from '$lib/types/Nft';
 	import Loading from '$lib/components/Loading.svelte';
@@ -11,6 +11,7 @@
 	import { fetchPolygonNFTs, fetchZENIQSmartchainNfts, getEthereumAvinocNfts } from '$lib/web3/nft-balance-fetching';
 	import { fetchOmonNFTs } from '$lib/web3/nft-webon-fetching';
 	import '$lib/backup-modal.js';
+	import { getEvmAddress } from '$lib/web3/ethers-providers';
 
 
 	let loading = true;
@@ -33,7 +34,7 @@
 		}
 
 		error = '';
-		const address = await nomoGetEvmAddress();
+		const address = await getEvmAddress();
 		if (address) await fetchNFTs(address);
 		clickedStore.set(undefined as any);
 		rerender_key = {};

@@ -1,7 +1,10 @@
 import { ethers } from 'ethers';
 import { zscProvider } from 'ethersjs-nomo-webons';
-import type { NomoEvmNetwork } from 'nomo-webon-kit';
+import { nomo, type NomoEvmNetwork } from 'nomo-webon-kit';
 
+export async function getEvmAddress() {
+  return await nomo.getEvmAddress();
+}
 
 export function getEthersProvider(network: NomoEvmNetwork): ethers.AbstractProvider {
 	if (network === 'zeniq-smart-chain') {

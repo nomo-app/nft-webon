@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 	import {
 		type NomoEvmNetwork,
-		nomoGetEvmAddress,
 		nomoGetInstalledWebOns,
 		nomoInstallWebOn,
 		nomoRegisterOnWebOnVisible
@@ -18,7 +17,7 @@
 	import NFTIDElement from '$lib/components/NFTIDElement.svelte';
 
 	import { getNftName } from '$lib/helper/name-replace';
-	import { getEthersProvider } from '$lib/web3/ethers-providers';
+	import { getEthersProvider, getEvmAddress } from '$lib/web3/ethers-providers';
 
 	let NFT: ExtendedNft;
 	let loading = true;
@@ -60,7 +59,7 @@
 	});
 
 	async function fetchIds() {
-		const add = await nomoGetEvmAddress();
+		const add = await getEvmAddress();
 
 		if (true) {
 			const provider = getEthersProvider(chain);

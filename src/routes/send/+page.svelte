@@ -6,10 +6,10 @@
 	import type { ExtendedNft } from '$lib/types/Nft';
 	import Loading from '$lib/components/Loading.svelte';
 	import { Contract, ethers } from 'ethers';
-	import { nomoGetEvmAddress, nomo } from 'nomo-webon-kit';
-	import { EthersjsNomoSigner, zscProvider } from 'ethersjs-nomo-webons';
+	import { nomo } from 'nomo-webon-kit';
+	import { EthersjsNomoSigner } from 'ethersjs-nomo-webons';
 	import { invokeNomoFunction } from 'nomo-webon-kit/dist/dart_interface';
-	import { getEthersProvider } from '$lib/web3/ethers-providers';
+	import { getEthersProvider, getEvmAddress } from '$lib/web3/ethers-providers';
 
 	let receiverAddress = '';
 	let tokenId: bigint;
@@ -86,7 +86,7 @@
 			return;
 		}
 		const ownerContract = await getOwnerOfContract();
-		const nvm = await nomoGetEvmAddress();
+		const nvm = await getEvmAddress();
 		const isOwner = (await ownerContract.ownerOf(tokenId))?.toLowerCase();
 
 		if (isOwner && isOwner.toLowerCase() !== nvm.toLowerCase()) {
@@ -97,7 +97,7 @@
 		inputError = '';
 		try {
 			const transferContract = await getTransferContract();
-			const address = nomoGetEvmAddress();
+			const address = await getEvmAddress();
 			await transferContract.safeTransferFrom(address, receiverAddress, tokenId, { gasLimit: 250000 });
 		} catch (e: any) {
 			console.error(e);
