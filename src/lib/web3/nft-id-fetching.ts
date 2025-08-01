@@ -7,9 +7,9 @@ export async function fetchNFTIDs(args: {
 	chain: NomoEvmNetwork;
 	nftContractAddress: string;
 }): Promise<bigint[]> {
-	// if (args.chain === 'polygon') {
-	// 	return fetchOwnedNFTIDsByEnumeration(args);
-	// }
+	if (args.chain === 'polygon') {
+		return fetchNFTIDsERC721Enumerable(args);
+	}
 	const provider = getEthersProvider(args.chain);
 	const evmAddress = await getEvmAddress();
 	const nftList = await nomoFetchERC721({
@@ -20,26 +20,23 @@ export async function fetchNFTIDs(args: {
 	return nftList.map((nft) => nft.tokenID);
 }
 
-export async function fetchOwnedNFTIDsByEnumeration(args: {
+/**
+ * This works for contracts that inherit from erc721-enumerable.
+ */
+export async function fetchNFTIDsERC721Enumerable(args: {
 	chain: NomoEvmNetwork;
 	nftContractAddress: string;
 }): Promise<bigint[]> {
 	const evmAddress = await getEvmAddress();
 	const provider = getEthersProvider(args.chain);
 	const nftContract = getNftBalanceFetchContract(provider, args.nftContractAddress);
-	let tokenID: bigint = 1n;
-	const maxTokenID = 1500n;
+	let index: bigint = 0n;
+	const balance = await nftContract.balanceOf(evmAddress);
 	const ownedTokenIDs: bigint[] = [];
-	while (tokenID < maxTokenID) {
-		try {
-			const owner = await nftContract.ownerOf(tokenID);
-			if (owner.toLowerCase() === evmAddress.toLowerCase()) {
-				ownedTokenIDs.push(tokenID);
-			}
-		} catch (error) {
-			console.error(`Error fetching owner for token ID ${tokenID}:`, error);
-		}
-		tokenID++;
+	while (index < balance) {
+		const tokenID = await nftContract.tokenOfOwnerByIndex(evmAddress, index);
+		ownedTokenIDs.push(tokenID);
+		index++;
 	}
 	return ownedTokenIDs;
 }

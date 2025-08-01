@@ -84,7 +84,7 @@ export function getNftBalanceFetchContract(
 		contractAddress,
 		[
 			`function balanceOf(address owner) view returns (uint256)`,
-			`function ownerOf(uint256 tokenId) view returns (address)`
+			`function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)`
 		],
 		provider
 	);
