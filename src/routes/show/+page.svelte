@@ -136,7 +136,7 @@
 		<div class="label">Contract Address</div>
 		<div class="contract">{NFT?.baseNFT?.contractAddress ?? 'Missing address'}</div>
 		{#if (+NFT?.baseNFT?.balance ?? 0) > 1}
-			<div class="label">Balance</div>
+			<div class="label">Count</div>
 			<div class="contract">{NFT?.baseNFT?.balance ?? '1'}</div>
 		{:else if (+NFT?.baseNFT?.balance ?? 0) === 1 && tokenIds?.length === 1}
 			<div class="label">ID</div>

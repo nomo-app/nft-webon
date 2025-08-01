@@ -54,7 +54,7 @@
 				throw Error(`Chain ${$selectedChain} not supported`);
 			}
 		} catch (e: any) {
-			error = `Failed to fetch NFT balances for ${$selectedChain}`;
+			error = `Failed to fetch NFTs for ${$selectedChain}`;
 			prettyLogError(e);
 		}
 	}

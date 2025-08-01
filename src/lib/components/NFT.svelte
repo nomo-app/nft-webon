@@ -27,7 +27,7 @@
 	<span class="content-wrapper">
 		<div class="name">{getNftName(NFT)}</div>
 		{#if (+NFT?.baseNFT?.balance) > 1}
-			<div>Balance: {NFT?.baseNFT?.balance}</div>
+			<div>Count: {NFT?.baseNFT?.balance}</div>
 		{/if}
 		<!--	<span class="address">{NFT?.nft?.contractAddress ?? 'Missing address'}</span>-->
 		<span class="main_btn no-select">Details</span>
