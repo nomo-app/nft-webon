@@ -13,11 +13,11 @@
 	import { clickedStore, selectedChain, selectedNFTIdStore } from '$lib/store/clickedStore';
 	import { goto } from '$app/navigation';
 	import { avinoc_contract, avinoc_contract_eth } from '$lib/helper/constants';
-	import { type ERC721Entity, nomoFetchERC721 } from '$lib/web3/nft-id-fetching';
 	import NFTIDElement from '$lib/components/NFTIDElement.svelte';
 
 	import { getNftName } from '$lib/helper/name-replace';
 	import { getEthersProvider, getEvmAddress } from '$lib/web3/ethers-providers';
+	import { nomoFetchERC721, type ERC721Entity } from 'ethersjs-nomo-webons';
 
 	let NFT: ExtendedNft;
 	let loading = true;
