@@ -4,7 +4,7 @@ import { nomo, type NomoEvmNetwork } from 'nomo-webon-kit';
 import { ethNetwork, RotatingRpcProvider, rpcUrlsEthereumMainnet } from './rotating-rpc-provider';
 
 export async function getEvmAddress() {
-	//return '0x799021D2fdd2daAE79d61b66012ada83db2Be428';
+	// return '0x799021D2fdd2daAE79d61b66012ada83db2Be428';
 	return await nomo.getEvmAddress();
 }
 
@@ -12,9 +12,9 @@ const ethProviderInstance = new RotatingRpcProvider(rpcUrlsEthereumMainnet, ethN
 
 const polygonNetwork = new ethers.Network('polygon', 137n);
 const rpcUrlsPolygon = [
-	'https://rpc.ankr.com/polygon',
+	//'https://rpc.ankr.com/polygon',
 	'https://polygon-rpc.com',
-	'https://matic-mainnet.chainstacklabs.com',
+	'https://matic-mainnet.chainstacklabs.com'
 ];
 
 export const polygonProviderInstance = new RotatingRpcProvider(rpcUrlsPolygon, polygonNetwork);
@@ -25,7 +25,10 @@ export function getEthersProvider(network: NomoEvmNetwork): ethers.AbstractProvi
 	} else if (network === 'ethereum') {
 		return ethProviderInstance;
 	} else if (network === 'polygon') {
-		return polygonProviderInstance;
+		return new ethers.JsonRpcProvider('https://polygon-rpc.com', {
+			name: 'polygon',
+			chainId: 137
+		});
 	} else {
 		throw new Error(`Unimplemented network: ${network}`);
 	}

@@ -76,13 +76,16 @@ export async function fetchZENIQSmartchainNfts(args: {
 	return extendedNFTs;
 }
 
-function getNftBalanceFetchContract(
+export function getNftBalanceFetchContract(
 	provider: ethers.AbstractProvider,
 	contractAddress: string
 ): Contract {
 	return new ethers.Contract(
 		contractAddress,
-		[`function balanceOf(address owner) view returns (uint256)`],
+		[
+			`function balanceOf(address owner) view returns (uint256)`,
+			`function ownerOf(uint256 tokenId) view returns (address)`
+		],
 		provider
 	);
 }

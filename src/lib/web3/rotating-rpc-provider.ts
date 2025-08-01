@@ -71,7 +71,7 @@ export class RotatingRpcProvider extends ethers.AbstractProvider {
     }
 
     // If all providers fail, throw the last encountered error
-    throw new Error(`All providers failed. Last error: ${lastError.message}`);
+    throw new Error(`All providers failed. Last error: ${lastError?.message}`);
   }
 }
 
