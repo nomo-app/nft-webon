@@ -1,16 +1,23 @@
 import { ethers } from 'ethers';
 import { zscProvider } from 'ethersjs-nomo-webons';
 import { nomo, type NomoEvmNetwork } from 'nomo-webon-kit';
+import { ethNetwork, RotatingRpcProvider, rpcUrlsEthereumMainnet } from './rotating-rpc-provider';
 
 export async function getEvmAddress() {
+  // return "0x799021D2fdd2daAE79d61b66012ada83db2Be428";
   return await nomo.getEvmAddress();
 }
+
+const ethProviderInstance = new RotatingRpcProvider(
+  rpcUrlsEthereumMainnet,
+  ethNetwork,
+);
 
 export function getEthersProvider(network: NomoEvmNetwork): ethers.AbstractProvider {
 	if (network === 'zeniq-smart-chain') {
 		return zscProvider;
 	} else if (network === 'ethereum') {
-		return ethers.getDefaultProvider();
+		return ethProviderInstance;
 	} else if (network === 'polygon') {
 		return new ethers.JsonRpcProvider('https://polygon-rpc.com', {
 			name: 'polygon',
