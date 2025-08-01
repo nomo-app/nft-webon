@@ -4,7 +4,9 @@ import { nomo, type NomoEvmNetwork } from 'nomo-webon-kit';
 import { ethNetwork, RotatingRpcProvider, rpcUrlsEthereumMainnet } from './rotating-rpc-provider';
 
 export async function getEvmAddress() {
-	// return '0x799021D2fdd2daAE79d61b66012ada83db2Be428';
+	if (!nomo.runsAsWebOn()) {
+		return '0x799021D2fdd2daAE79d61b66012ada83db2Be428';
+	}
 	return await nomo.getEvmAddress();
 }
 
