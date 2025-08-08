@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "nomo-webon-kit": "^0.1.40",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
