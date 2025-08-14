@@ -1,15 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { OmonNFT, ExtendedNft, BaseNFT } from '$lib/types/Nft';
-import type { NomoManifest } from 'nomo-webon-kit';
+import type { NomoEvmNetwork, NomoManifest } from 'nomo-webon-kit';
 import { nomo } from 'nomo-webon-kit';
 import { Contract, ethers } from 'ethers';
-import { avinoc_contract_eth } from '$lib/helper/constants';
-import { getWebonsWithNFTInManifest } from './nft-webon-fetching';
-import { getEthersProvider } from './ethers-providers';
+import { fetchOmonNFTs, getWebonsWithNFTInManifest } from './nft-webon-fetching';
+import { getEthersProvider, getEvmAddress } from './ethers-providers';
+import type { BaseNFT, ExtendedNft, OmonNFT } from '../types/Nft';
+import { avinoc_contract_eth } from '../helper/constants';
+
+export async function fetchNftBalances(args: { chain: NomoEvmNetwork }): Promise<ExtendedNft[]> {
+
+	const address = await getEvmAddress();
+	const omonNFTs = await fetchOmonNFTs();
+
+	let nfts: ExtendedNft[] = [];
+	switch (args.chain) {
+		case 'polygon':
+			nfts = await fetchPolygonNFTs({ address, omonNFTs });
+			break;
+		case 'zeniq-smart-chain':
+			nfts = await fetchZENIQSmartchainNfts({ address, omonNFTs });
+			break;
+		case 'ethereum':
+			nfts = await getEthereumAvinocNfts({ address, omonNFTs });
+			break;
+		default:
+			throw new Error(`Unsupported chain: ${args.chain}`);
+	}
+	return nfts;
+}
 
 const otiumStakingContract = '0x2026e56be6f8CA6dC7AeED3b2cb715ce04F33c2a';
 
-export async function fetchPolygonNFTs(args: {
+async function fetchPolygonNFTs(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
@@ -32,7 +54,7 @@ export async function fetchPolygonNFTs(args: {
 	return [{ baseNFT, manifest: null, omonNFT }];
 }
 
-export async function fetchZENIQSmartchainNfts(args: {
+async function fetchZENIQSmartchainNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {
@@ -90,7 +112,7 @@ export function getNftBalanceFetchContract(
 	);
 }
 
-export async function getEthereumAvinocNfts(args: {
+async function getEthereumAvinocNfts(args: {
 	address: string;
 	omonNFTs: any;
 }): Promise<ExtendedNft[]> {

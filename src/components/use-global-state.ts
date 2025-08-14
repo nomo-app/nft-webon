@@ -1,9 +1,11 @@
 import type { NomoEvmNetwork } from "nomo-webon-kit";
 import { createContext, useContext } from "react";
+import type { ExtendedNft } from "../lib/types/Nft";
 
 export interface GlobalState {
   selectedChain: NomoEvmNetwork;
   theme: "light" | "dark";
+  nfts: ExtendedNft[] | null;
 }
 
 export const GlobalStateContext = createContext<{

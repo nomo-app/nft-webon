@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "ethers": "^6.15.0",
+    "ethersjs-nomo-webons": "^0.2.5",
     "nomo-webon-kit": "^0.1.40",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
