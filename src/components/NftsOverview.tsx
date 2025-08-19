@@ -16,16 +16,33 @@ export const NftsOverview: React.FC = () => {
   }
 
   return (
-    <div>
-      <ul>
-        {nfts.map((nft) => (
-          <li key={nft.baseNFT.symbol}>
-            <p>{nft.baseNFT.name}</p>
-            <p>{nft.baseNFT.contractAddress}</p>
-            <p>{"Count: " + nft.baseNFT.balance}</p>
-          </li>
-        ))}
-      </ul>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+        gap: "16px",
+      }}
+    >
+      {nfts.map((nft) => (
+        <div
+          key={nft.baseNFT.symbol}
+          style={{
+            border: "1px solid #e0e0e0",
+            borderRadius: "8px",
+            padding: "16px",
+            background: "#fafafa",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+          }}
+        >
+          <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
+            {nft.baseNFT.name}
+          </p>
+          <p style={{ fontSize: "12px", color: "#888", marginBottom: "8px" }}>
+            {nft.baseNFT.contractAddress}
+          </p>
+          <p>{"Count: " + nft.baseNFT.balance}</p>
+        </div>
+      ))}
     </div>
   );
 };
