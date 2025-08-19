@@ -1,7 +1,19 @@
 import React from "react";
 import { useGlobalState } from "./use-global-state";
+import { ChainSelect } from "./ChainSelect";
 
 export const NftsOverview: React.FC = () => {
+  return (
+    <div>
+      <h1>NFTs</h1>
+      <ChainSelect />
+      <NftGrid />
+      <div className="card"></div>
+    </div>
+  );
+};
+
+const NftGrid: React.FC = () => {
   const { state } = useGlobalState();
   const nfts = state.nfts;
 
