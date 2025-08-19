@@ -12,13 +12,22 @@ export const GlobalStateProvider = ({
     selectedChain: "zeniq-smart-chain",
     theme: "light",
     nfts: null,
+    fetchError: null,
   });
 
   async function fetchChainData(chain: NomoEvmNetwork) {
-    setState((prev) => ({ ...prev, nfts: null }));
-    const nfts = await fetchNftBalances({ chain });
-    console.log("Fetched NFTs for chain:", chain, nfts);
-    setState((prev) => ({ ...prev, nfts }));
+    setState((prev) => ({ ...prev, nfts: null, fetchError: null }));
+    try {
+      const nfts = await fetchNftBalances({ chain });
+      console.log("Fetched NFTs for chain:", chain, nfts);
+      setState((prev) => ({ ...prev, nfts }));
+    } catch (e) {
+      console.error(e);
+      setState((prev) => ({
+        ...prev,
+        fetchError: e instanceof Error ? e.message : "Unknown error",
+      }));
+    }
   }
 
   useEffect(() => {

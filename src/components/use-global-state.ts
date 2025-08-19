@@ -6,6 +6,7 @@ export interface GlobalState {
   selectedChain: NomoEvmNetwork;
   theme: "light" | "dark";
   nfts: ExtendedNft[] | null;
+  fetchError: string | null;
 }
 
 export const GlobalStateContext = createContext<{

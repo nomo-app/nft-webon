@@ -5,6 +5,9 @@ export const NftsOverview: React.FC = () => {
   const { state } = useGlobalState();
   const nfts = state.nfts;
 
+  if (state.fetchError) {
+    return <div>Error fetching NFTs: {state.fetchError}</div>;
+  }
   if (!nfts) {
     return <div>Loading NFTs...</div>;
   }
