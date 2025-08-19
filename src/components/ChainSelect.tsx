@@ -26,8 +26,31 @@ export const ChainSelect: React.FC = () => {
   };
 
   return (
-    <div>
-      <select onChange={handleChainChange}>
+    <div
+      style={{
+        display: "inline-block",
+        minWidth: 200,
+        padding: 12,
+        borderRadius: 8,
+        background: "#fff",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+      }}
+    >
+      <select
+        onChange={handleChainChange}
+        style={{
+          width: "100%",
+          padding: "10px 14px",
+          borderRadius: 4,
+          border: "1px solid #c4c4c4",
+          fontSize: 16,
+          background: "#fafafa",
+          color: "#333",
+          outline: "none",
+          transition: "border-color 0.2s",
+          boxSizing: "border-box",
+        }}
+      >
         {chainOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.name}
