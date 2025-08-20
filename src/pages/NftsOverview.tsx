@@ -1,8 +1,11 @@
 import React from "react";
-import { useGlobalState } from "./use-global-state";
-import { ChainSelect } from "./ChainSelect";
+import { useGlobalState } from "../components/use-global-state";
+import { ChainSelect } from "../components/ChainSelect";
+import { useNavigate } from "react-router-dom";
+import { nftDetailsRoute } from "../routes";
+import type { ExtendedNft } from "../lib/types/Nft";
 
-export const NftsOverview: React.FC = () => {
+const NftsOverview: React.FC = () => {
   return (
     <div>
       <h1>NFTs</h1>
@@ -12,9 +15,11 @@ export const NftsOverview: React.FC = () => {
     </div>
   );
 };
+export default NftsOverview;
 
 const NftGrid: React.FC = () => {
   const { state } = useGlobalState();
+  const navigate = useNavigate();
   const nfts = state.nfts;
 
   if (state.fetchError) {
@@ -26,6 +31,11 @@ const NftGrid: React.FC = () => {
   if (nfts.length === 0) {
     return <div>No NFTs found for the selected chain.</div>;
   }
+
+  const handleClick = (nft: ExtendedNft) => {
+    const route = nftDetailsRoute({ nft });
+    navigate(route);
+  };
 
   return (
     <div
@@ -45,6 +55,7 @@ const NftGrid: React.FC = () => {
             background: "#fafafa",
             boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
           }}
+          onClick={() => handleClick(nft)}
         >
           <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
             {nft.baseNFT.name}
